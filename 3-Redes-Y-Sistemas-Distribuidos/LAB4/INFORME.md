@@ -1,13 +1,64 @@
-# Informe Lab4 2025 - Redes y Sistemas Distribuidos.
+# Analisis del trafico de red bajo diferentes estrategias de enrutamiento
+## Informe Lab4 2025 - Redes y Sistemas Distribuidos.
 
-Integrantes:
-* Gonzalez Juan Pablo.
-* Guerrero Diego Alejandro.
-* Madero Ismael.
-* Pellegrino Milena.
+## RESUMEN 
+En este proyecto nos enfocamos en el analisis y dearrollo de estrategias de enrutamiento dentro de la capa de red. La red analisada y desarrollada tiene topologia [anillo](https://es.wikipedia.org/wiki/Red_en_anillo). <br>
+Para realizar este trabajo utilizamos Omnet++, una bibloteca con un marco de simulación en C++ destinado principalmente a la creación de simuladores de red, nosotros lo utilizamos para poder generar estos modelos de red que posteriormente analizamos. <br><br>
+En este lab desarrollamos un modelo de enrutamiento a partir de uno ya constituido, analizamos ambos modelos y determinamos mediante valores resultados y graficas que nuestro modelo desarrollado es mas eficiente a la hora de ejecutar la simulacion que el entregado inicialmente.<br>
+A continuacion puede verse todo el analisis.
 
-## Analisis de red inicial.
+## Integrantes
+  - Guerrero Diego
+  - Gonzalez Juan Pablo
+  - Madero Ismael
+  - Pellegrino Milena
 
+## Índice
+
+1. [INTRODUCCIÓN](#introducción)
+   - [Problema](#problema)
+   - [Esquema de nuestra red](#el-esquema-de-nuestra-red)
+   - [Simulación discreta](#simulación-discreta)
+
+2. [Análisis de red inicial](#análisis-de-red-inicial)
+   - [Caso 1](#caso-1)
+     - [¿Qué métricas se obtienen?](#qué-métricas-se-obtienen)
+     - [¿Cómo es el uso de los recursos de la red? ¿Se puede mejorar?](#cómo-es-el-uso-de-los-recursos-de-la-red-se-puede-mejorar)
+   - [Caso 2](#caso-2)
+     - [Explore y determine a partir de qué valor de interArrivalTime se puede garantizar un equilibrio o estabilidad en la red. Justifique.](#explore-y-determine-a-partir-de-qué-valor-de-interarrivaltime-se-puede-garantizar-un-equilibrio-o-estabilidad-en-la-red-justifique)
+
+3. [Tarea Diseño](#tarea-diseño)
+   - [Aclaraciones](#aclaraciones)
+   - [Ejemplo del funcionamiento del algoritmo](#ejemplo-del-funcionamiento-del-algoritmo)
+   - [Problema a la vista](#problema-a-la-vista)
+   - [Solución encontrada](#solución-encontrada)
+
+4. [Análisis del algoritmo diseñado](#análisis-del-algoritmo-diseñado)
+   - [CASO 1](#caso-1)
+   - [CASO 2](#caso-2)
+
+5. [Resultados](#resultados)
+
+6. [Discusión](#discusión)
+   - [Logros](#logros)
+   - [Mejoras](#mejoras)
+
+7. [Referencias](#referencias)
+
+## INTRODUCCION 
+Se nos proporciono una red funcional para que testeemos y determinemos si dicha red cumple ser **equilibrada**, donde nosotros definimos qué significa que una red sea **equilibrada**.
+### Problema
+El **enrutamiento**, es la seleccion de rutas para el envio de paquetes dentro de una red, en nuestro caso los caminos posibles son las conexiones entre nodos.<br>
+Nosotros debemos analizar y determinar que enrutamiento seria mas apropiado para una red determinada.<br>
+Dicho problema ya fue trabajado previamente con distintos algoritmos que se encargan de esta problematica, algunos de ellos son: 
+- [Algoritmo de vector de distancia](https://es.wikipedia.org/wiki/Vector_de_distancias)
+- [Algoritmo de estado de enlace](https://es.wikipedia.org/wiki/Estado_de_enlace)
+- [Algoritmo de Dijkstra](https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra)
+- [Algoritmo de Bellman-Ford](https://es.wikipedia.org/wiki/Algoritmo_de_Bellman-Ford) 
+- [Enrutamiento por inundación](https://es.wikipedia.org/wiki/Inundaci%C3%B3n_de_red)
+
+Nosotros decidimos seguir una idea similar al algoritmo de estado de enlace, basandonos en mensajes tipados para compartir informacion entre nodos, ignorando las listas de nodos.
+### El esquema de nuestra red
 Una red es un conjunto de nodos conectados entre si que facilitan el envio de paquetes.
 
 Nodos: Miembros de la red que crean, envian y reciben paquetes. En su composicion tienen:
@@ -17,11 +68,21 @@ Nodos: Miembros de la red que crean, envian y reciben paquetes. En su composicio
 
 Nodos de nuestra red:<br>
 ![Node[0]](img/Node.png)
+ 
+Como dijimos anteriormente es topologia de anillo conformada de la siguiente manera:<br>
+![anillo](img/Red.png)<br>
 
-En un principio nos fue proporcionada una red funcional para que testeemos y determinemos si dicha red cumple ser **equilibrada**, donde nosotros definimos qué significa que una red sea **equilibrada**.
 
-Nuestra red:<br>
-![Red](img/Red.png)
+### Simulación discreta
+Para los análisis de los experimentos (tanto del caso 1, como del caso 2) realizamos simulaciones discretas, es decir, los eventos ocurren en momentos específicos y el tiempo ocurre en pasos discretos, nosotros utilizamos Omnet++. Hacerlo de esta manera nos permite evaluar el desempeño de una red sin la necesidad de tenerla físicamente.
+
+Se nos entrego una red inicial la cual consta de enrutamiento basado en envio de paquetes sentido agujas del reloj, donde el Node[0] y el Node[2] envian paquetes con destino a Node[5].<br>
+Debemos analizar mediante vectores generados durante la simulacion, dicha red.
+
+
+## Analisis de red inicial.
+
+
 
 Empezaremos definiendo que es una red equilibrada, para eso dicha red debe cumplir:
 
@@ -30,10 +91,6 @@ Empezaremos definiendo que es una red equilibrada, para eso dicha red debe cumpl
 
 Dicho esto podremos concluir que una red equilibrada **envia paquetes por el camino más corto con menos congestion**.
 
-Analizando dicha red podemos observar que su flujo  de trabajo es el siguiente:
-
-- Todos los paquetes son enviados en sentido de las agujas del reloj.<br>
-Esto quiere decir que en la red dada Node[0] envia a Node[7] y todos los demas nodos envian al nodo con numero mas chico.
 
 ### Caso 1 
 - Node[0] y Node[2] producen paquetes con destino a Node[5].
@@ -120,19 +177,10 @@ Ademas los delays se mantienen en los mismos valores aproximadamente, y no son c
 Se recibe una cantidad similar de paquetes de todos los nodos.<br>
 Aunque la cantidad recibida por Node[5] ronda al rededor de 150 cuando en el caso de exponential(0.1) era de alrededor de 190, lo que marca una contra en favor de no tener una red saturada y recibir paquetes de todos los nodos.
 
-### Conclusion
-
-Viendo ambos casos podemos concluir que no es una red equilibrada, pues sobrecarga mucho las colas y los nodos no envian paquetes por los caminos mas cortos.<br>
-Ademas para equilibrarla se retrasa mucho la produccion de paquetes.<br>
-Puede mejorarse este algoritmo de enrutamiento si se opta por buscar rutas mas cortas.<br>
-Por ejemplo, en el caso 1, los paquetes producidos por el Node[2] podrian ir por el Node[3], Node[4], Node[5].<br>
-De esta manera se aprovecha un camino no utilizado previamente que se encuentra libre y ademas las cantidad de Hops seria menor, pasando de 5 a 3.
-
-
 ## Tarea Diseño
 
 
-Se nos solicitó diseñar una estrategia de enrutamiento, cabe aclarar que por el tiempo del laboratorio no elegimos un algoritmo muy complejo como por ejemplo el protocolo de vector de distancia o el enrutamiento de estado de enlace vistos en el teórico, nuestra idea del algoritmo fue la siguiente (A priori):
+Se nos solicitó diseñar una estrategia de enrutamiento, cabe aclarar que por el tiempo del laboratorio no elegimos un algoritmo muy complejo como por ejemplo el protocolo de vector de distancia o el enrutamiento de estado de enlace vistos en el teórico, nuestra idea del algoritmo fue la siguiente:
 - En el primer momento donde no se tiene un paquete de feedback, y todavía no sabemos cual es la mejor ruta, lo que hacemos es enviar los paquetes en el sentido de la aguja del reloj (esto lo hacemos para no tener paquetes esperando en el buffer)
 - Los nodos generadores comienzan con un paquete de “testeo" (Todos de manera sincrónica).
 - El paquete de testeo es enviado a ambos vecinos del nodo (esto es así, porque sabemos de antemano que es una red con topología anillo, es nuestro único supuesto y lo único que sabemos con respecto a la red).
@@ -213,5 +261,49 @@ En este caso, no vemos tanta diferencia entre los valores de delay entre el algo
 ![IMAGEN](img/CASO%202/delays_test.png)
 Acá podemos ver los eventos de test junto con el delay, lo que nos interesa obvservar es que los test no se ejecutan todos simultaneamente sino que están repartidos, lo cuál es importante.
 
-### Extra:
+## Resultados:
+Luego de analizar ambas redes, podemos concluir una mejora en el rendimiento general de la red con el algoritmo de enrutamiento que diseñamos, ya que; **como vimos en el analisis de la red inicial:**<br>
+Viendo ambos casos podemos concluir que no es una red equilibrada, pues sobrecarga mucho las colas y los nodos no envian paquetes por los caminos mas cortos, lo que contradice nuestra definicion de red equilibrada.<br>
+Ademas para equilibrarla se retrasa mucho la produccion de paquetes como vimos en el caso de interarrivaltime modificado.<br>
+Puede mejorarse este algoritmo de enrutamiento si se opta por buscar rutas mas cortas.<br>
+Por ejemplo, en el caso 1, los paquetes producidos por el Node[2] podrian ir por el Node[3], Node[4], Node[5].<br>
+De esta manera se aprovecha un camino no utilizado previamente que se encuentra libre y ademas las cantidad de Hops seria menor, pasando de 5 a 3.<br><br>
+**Ahora, como vimos en el analisis del algoritmo diseñado:**<br>
+En el caso 1:<br>
+- Una carga en las colas similar en todos los nodos. 
+- Una cantidad mayor de paquetes que llegaron con menos saltos esto indica que se suele elegir la ruta mas corta, a excepcion de los momentos en que se detecta congestion.  
+- Un delay que si bien aumenta es controlado periodicamente por los paquetes de feedback.<br>
+
+En el caso 2:<br>
+- Una carga en las colas similar en todos los nodos, con mayor frecuencia en los que estan en distancia media al nodo destino.
+- Se ve una relacion entre menor cantidad de saltos y cantidad de paquetes efectivos, es decir, se reciben mas paquetes de los que tienen menos saltos que de aquellos que se encuentran mas distantes del nodo destino.
+- En este caso el delay es ligeramente mayor al de la red inicial, esto se debe a que no solo todos los nodos estan generando paquetes, sino que ademas por el sistema de reenrutamiento se elige cambiar de camino para evitar congestion, lo que genera mas delay.<br>
+
+Por lo tanto concluimos que logramos desarrollar un algoritmo de enrutamiento para una red con topologia anillo, con el objetivo de mejorar el rendimiento general de la red, aunque no es [perfecto](#discusion) y hay varios aspectos que se pueden mejorar, en resumen, funciona mejor en redes menos congestionadas que en el de red inicial dado.
+
+## Discusion:
+
+**Logros:**
+- Conseguimos entender y dominar el framework OMNET++, al menos con lo que respecta a este lab.
+- Mejoramos el algoritmo y nos mantuvimos fieles a la decision de una red equilibrada.
+- Nos familiarizamos con el uso de collab para generar graficos y hacer analisis. Junto con esto pudimos determinar estadisticas apropiadas para analisis de red.
+
+**Mejoras:**
+- Dado que diseñamos el algoritmo pensando en una topologia de anillo, este mismo no es aplicable para redes con topologias diferentes.
+- Podria considerarse que los paquetes feedback y test contengan mas informacion para permitir a cada nodo conocer todos sus vecinos y elegir la ruta mas optima.
+- En algunos momentos como en el caso 2 el diseño con feedback empeora el funcionamiento de red, por lo tanto podria buscarse evitar enviar estos feedback innecesarios.
+- En redes supercongestionadas los paquetes test tardan mucho en llegar y provocan congestion, por lo que se podria implementar un TTL en el paquete para ser eliminado cuando pase un determinado tiempo. 
+- La cantidad de paquetes enviados hasta reenvar un nuevo paquete feedback podria analizarse mejor para ver cual seria la cantidad optica (ademas a medida que se ejecuta la red podriamos implementar que esta cantidad se vaya modificando, es decir que no sea una cantidad fija, esto con el objetivo de no sobresaturar la red con paquetes de feedback y testeo). 
+- De igual manera podria reveer el tamaño de estos paquetes, (en nuestra algoritmom actual el tamaño es la mitad de los paquetes de datos, pero podrían ser menores).
+
+## Referencias:
+- [Protocolo de vector de distancia](https://famaf.aulavirtual.unc.edu.ar/pluginfile.php/53955/mod_resource/content/5/La%20Capa%20de%20Red%20-%20Enrutamiento%20de%20Estado%20de%20Enlace.pdf)
+- [Como graficar en collab](https://colab.research.google.com/drive/1wOr1jP7-s076qyJl7gxgQ63cqiEYJ8g0?usp=sharing)
+- [Manual de Omnet++](https://doc.omnetpp.org/omnetpp5/manual/)
+- [Graficas en Omnet++ con Python y Notebooks](https://www.youtube.com/watch?v=yL1gf04E2_E)
+- [Omnet++](https://omnetpp.org/)
+- [Estructura de un informe](https://www.youtube.com/watch?v=yq8zjLZABe0)
+
+
 Las graficas fueron generadas usando el sig. link de collab: [lab4_analisis](https://colab.research.google.com/drive/1AdbyTvdN3MwR7wmiGdik1NOO2emff0Gs?usp=sharing)
+
