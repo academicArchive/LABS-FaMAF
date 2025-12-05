@@ -1,3 +1,9 @@
 [submodule "Paradigmas-De-La-Programacion/LAB1"]
 	path = Paradigmas-De-La-Programacion/LAB1
 	url = https://github.com/Paradigmas25-g39/paradigmas25-g39-lab1.git
+[submodule "3-Ingenieria-del-Software-I/proyecto"]
+	path = 3-Ingenieria-del-Software-I/proyecto
+	url = https://github.com/academicArchive/ingSoft1-Proyecto.git
+[submodule "3-Bases-de-Datos/laboratorios"]
+	path = 3-Bases-de-Datos/laboratorios
+	url = https://github.com/academicArchive/Bases-de-Datos.git
